@@ -816,7 +816,7 @@ function *foo() {
     yield 1;
   }
   catch(err) {
-    console.log('Caught error in foo's catch' + err);
+    console.log("Caught error in foo's catch" + err);
   }
 }
 

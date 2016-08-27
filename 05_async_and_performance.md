@@ -304,7 +304,9 @@ var valuesPromise = Promise
   });
 ```
 
-The pattern for `new Promise(function(..) { .. })` is called ["revealing constructor"](http://domenic.me/2014/02/13/the-revealing-constructor-pattern/). Functions passed in are executed immediately.
+The pattern for `new Promise(function(..) { .. })` is called ["revealing constructor"](http://domenic.me/2014/02/13/the-revealing-constructor-pattern/). In other words, the constructor is revealing its internal capabilities (in the `function(..){}`) but only to the code that constructs it. You can't later call `.resolve` and `.reject` like you can in other Promise libraries.
+
+Note: Functions passed in are executed immediately.
 
 Promises can be used for control-flow.
 

@@ -583,6 +583,8 @@ evthub.listen(EVT_LOGIN, function(data) {
 
 You can use Symbols as a special property on an object that you want to treat as hidden or meta. Note: although this is your intent, it's not actually hidden or untouchable.
 
+Symbols typically focus on meta properties. There is no concern of them being overwritten when doing a mixin as each Symbol is unique.
+
 Example of a Singleton pattern.
 
 ```javascript
@@ -610,6 +612,8 @@ myCar === yourCar; // true
 ```
 
 Often need to use Symbols in the global scope. Use the *global symbol registry*. This checks to see if there is already a symbol stored with that descriptor. If there is, it returns it. If it doesn't, it creates one then returns it.
+
+Note: Using the global symbol registry allows for the symbol to be shared across realms. More info [here](http://www.2ality.com/2014/12/es6-symbols.html).
 
 ```javascript
 var EVT_LOGIN = Symbol.for('event.login');
@@ -1244,7 +1248,7 @@ Maps: similar to objects, but you can use any value for the keys -- event object
 
 Sets: similar to arrays, but the values are unique
 
-TypedArray: provides structured access to binary data
+TypedArray: provides structured access to binary data. These can be passed directly into libraries such as WebGL without any type of conversion.
 
 ```javascript
 var buffer = new ArrayBuffer(32);

@@ -14,12 +14,9 @@ Some of my notes may seem trivial or obvious, such as terminology, but I ask tha
 
 * Book 3: This & Object Prototypes
   * Submit PR to the book with changes. Look up in this section "`newObj.a; // 10`" and in chapter 5 "then the setter will always be called"
-* Book 4: Types & Grammar
-  * Research and practice bitwise operators
+    * Create an `originalObj`, `delegatedObj`, and `delegatedObjProxy`
+    * Proto-link `originalObj` to `delegatedObjProxy`
+    * Confirm that this does not call `delegatedObjProxy`
 * Book 5: Async & Performance
-  * Look up ["revealing constructor"](http://domenic.me/2014/02/13/the-revealing-constructor-pattern/) pattern
   * Look up examples of generators in the wild
   * Re-read chapter 4, appendix A, and appendix B after looking up more resources and playing around with Generators -- specifically gens+promises
-* Book 6: ES6 & Beyond
-  * Look up examples of using Symbols over string literals in JS (not including Well Known Symbols)
-  * Look up examples of TypedArrays

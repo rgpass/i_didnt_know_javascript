@@ -117,7 +117,7 @@ function bar() {
 bar.call(2); // Number {[[PrimitiveValue]]: 2}
 ```
 
-Hard binding solves the callback issue. It wraps a function in a way such that the context when called is always the same.
+Hard binding solves the callback issue. It wraps a function in a way such that the context is always the same when called.
 
 ```javascript
 function foo() {
@@ -155,6 +155,7 @@ bar.name; // "bound foo"
 There is no such thing as constructor functions, but rather construction calls of functions.
 
 When using the constructor call (aka `new`), four things are done automatically:
+
 1. A brand new object is created (aka constructed)
 2. The newly constructed object is `[[Prototype]]`-linked
 3. The newly constructed object is set as the `this` binding for that function call
@@ -338,7 +339,7 @@ var obj = {
 obj.foobar; // "hey"
 ```
 
-For duplicating, ES6 has the new `Object.assign` function which iterates over all enumerable arguments, adding properties solely be using the assignment (`=`) expression -- this does not preserve any property descriptors.
+For duplicating, ES6 has the new `Object.assign` function which iterates over all enumerable arguments, adding properties solely by using the assignment  expression (`=`) -- this does not preserve any property descriptors.
 
 ```javascript
 var oldObj = { blah: 'yeah' };
@@ -368,7 +369,7 @@ obj.a; // 4
 
 To make a property constant, set `writable` and `configurable` to `false`.
 
-Prevent extensions with `Object.preventExtensions(myObj)`.
+Prevent extensions with `Object.preventExtensions(myObj)`. This means no properties can be added to `myObj`.
 
 To prevent extensions and prevent any additions/removals of properties, use `Object.seal`.
 
@@ -379,6 +380,7 @@ When accessing properties, a `[[Get]]` operation is performed, like a function c
 Similar to `[[Get]]`, there is a `[[Put]]`.
 
 If a property is already set, the `[[Put]]` checks:
+
 1. Is the property an accessor descriptor (explained later)
 2. Does the property have a `writable` data descriptor set to `false`? If yes, silently fail in non-stict mode or throw `TypeError` in strict mode
 3. Otherwise, set the value of the existing property as normal
@@ -387,7 +389,7 @@ If it is not already set on the object, it goes up the `[[Prototype]]` chain for
 
 In ES5, you can alter the getter and setter of an object's property. In future JS versions, it will be possible to change object-level getters/setters.
 
-Getters call a hidden function to retrieve a value. Setters call a hidden function set a value. These are called accessor descriptors.
+Getters call a hidden function to retrieve a value. Setters call a hidden function to set a value. These are called accessor descriptors.
 
 Accessor descriptors ignore the `value` and `writable` descriptors. `configurable` and `enumerable` are still used.
 
@@ -450,7 +452,7 @@ var arr = [1, 2];
 1 in arr; // true
 2 in arr; // false
 
-// in checks for keys not values
+// "in" checks for keys not values
 ```
 
 There are a couple of strategies to distinguish enumerables from non-enumerables.
@@ -628,13 +630,17 @@ var Another = {
 ```
 
 Summary: attempting to apply classes to JS is no good because...
+
 Chapter 4:
-* Classes are copies as functions whereas JS uses references -- overwriting the reference will change it for all instances
+
+* Classes are copies of functions whereas JS uses references -- overwriting the reference will change it for all instances
 * Making a copy of a function is sometimes functional at best
 * Before ES6's `super`, there was no easy was to apply relative polymorphism
 * Mixins do not allow for polymorphism in JS
 * Pseudo-polymorphism is brittle
+
 Chapter 5:
+
 * Adds confusion that functions are constructors
 * Adds confusion on what `new` is actually doing
 * Adds confusion that `instance.constructor` is a property on the instance, not its delegated object's property
@@ -755,7 +761,7 @@ Bar.prototype = new Foo(); // induces unwanted side effects
 
 `myFoo instanceof Foo` only works if `myFoo`'s chain points to `Foo.prototype` at some point. This can break down if using a `.bind(..)` as the hard-bound function will not have a `.prototype` property.
 
-Determing relationship is much easier with OLOO.
+Determining relationship is much easier with OLOO.
 
 ```javascript
 var delegatedObj = {};
@@ -818,6 +824,7 @@ OLOO's object creation (`var myBtn = Object.create(widget)`) and initialization 
 ## Appendix A: ES6 `class`
 
 Benefits:
+
 1. It removes `.prototype` cluttering
 2. It removes the need to link prototypes
 3. Gives relative polymorphism
@@ -825,6 +832,7 @@ Benefits:
 5. It's much easier now to `extend` built-in object sub-types such as `Array` and `RegExp`
 
 Cons:
+
 1. JS doesn't make copies of functions like classes expect. Changing the parent affects all children
 2. If you want to add properties to the parent, you still need to use `.prototype`
 3. `super` is not bound dynamically but rather set at declaration time. `this` is set at call time but `super` is not. This means it's not possible to re-use and pass around functions with `super` unless you expect `super` to always to get the `[[HomeObject]]` defined at initialization (`class C extends P`)

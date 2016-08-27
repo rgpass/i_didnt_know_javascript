@@ -163,6 +163,7 @@ foo(); // ReferenceError: z is not defined
 // 1st param: w is found in the outer scope and is used to set x
 // 2nd param: the x is found in the formal param scope
 // 3rd param: fails because it's not-yet-initialized-at-that-moment
+```
 
 When destructuring objects, you can write it longways to give it a new variable name.
 
@@ -278,7 +279,7 @@ myFn({}, {}); // 10 undefined
 myFn({ x: 30 }, undefined); // 30 20
 ```
 
-Concide method form:
+Concise method form:
 
 ```javascript
 var x = 2;
@@ -383,7 +384,7 @@ for (var val of arr) {
 }
 // a  b  c  d
 
-// ES6 non-for..of equivalent via manual iteration
+// ES6 for..of equivalent but using manual iteration
 for (var val, ret, it = arr[Symbol.iterator](); (ret = it.next()) && !ret.done;) {
   val = ret.value;
   console.log(val);
@@ -550,9 +551,9 @@ var \u03A9 = 42;
 Ω; // 42
 
 // As of ES6, can use new escape syntax
-var \u{2B400} = 42;
+var \u{03A9} = 30;
 
-// same as: var 𫐀 = 42;
+// same as: var Ω = 30;
 ```
 
 Symbols do not have a literal form.
@@ -618,7 +619,7 @@ Symbols are used to eliminate magic strings, however their matching is dependent
 
 Real benefit of Symbols over magic strings is with metaprogramming.
 
-Can get a symbol's descript by using `Symbol.keyFor(sym)`.
+Can get a symbol's description by using `Symbol.keyFor(sym)`.
 
 See an object's symbols via `Object.getOwnPropertySymbols(obj)`.
 
@@ -774,15 +775,15 @@ it.next(5); // 5
 // implicit return: { value: undefined, done: true }
 ```
 
-Only the `...` spread operator and the `,` comma operator have lower precedence. Often need to wrap the yield with `()` to make it valid and execute first.
+Only the `...` spread operator and the `,` comma operator have lower precedence than `yield`. Often need to wrap the yield with `()` to make it valid and execute first.
 
 `yield` is right-associative. `yield yield 4` is the same as `yield (yield 4)`.
 
 `yield *bar` will invoke `bar`'s iterator and delegate its own host generator's control to `bar`'s iterator until `bar`'s iterator is exhausted, then it resumes with the original.
 
-Generators, when execute, create both an iterator and iterable. Thus can be used in `for..of` loops.
+Generators, when executed, create both an iterator and iterable. Thus can be used in `for..of` loops.
 
-The first `.next()` doesn't need a value because all it's doing is starting the generator.
+The first `.next()` doesn't need a value passed in because all it's doing is starting the generator.
 
 A generator's iterator does have `.return` and `.throw` methods. Both abort a paused generator immediately.
 
@@ -922,6 +923,7 @@ ES6 uses `import` and `export`. Both of which must appear at the top-level of th
 There is no global scope in modules. The only top-level scope is the module itself.
 
 ```javascript
+// This is the same
 export function foo() {
   // ...
 }
@@ -931,7 +933,8 @@ export var awesome = 30;
 var bar = [1, 2, 3];
 export { bar };
 
-// Same thing as:
+
+// As this:
 function foo() {
   // ...
 }
@@ -1004,7 +1007,7 @@ myModule.bar = 100; // (runtime) TypeError
 
 It is possible for modules to change their API from the inside, however ES6 modules are intended to be static. Any deviations from this should be well documented. Note: Can export a plain object and this object can be mutated.
 
-The module system solves circular dependencies.
+The module system resolves circular dependencies.
 
 The host environment provides the Module Loader mechanism. The specs for this are not set by ES6 but rather a separate, parallel committee.
 
@@ -1542,7 +1545,7 @@ Use the `Reflect` API to extend features and APIs to create Domain Specific Lang
 
 Feature test: determine what features are available to use in your code (such as `Number.isNaN` or `() => {}`).
 
-For polyfills, it's easy to do `if (!Number.isNaN) {}`.Because syntax errors will choke, it's harder.
+For polyfills, it's easy to do `if (!Number.isNaN) {}`. Because syntax errors will choke, it's harder.
 
 With arrow functions, a feature test is:
 

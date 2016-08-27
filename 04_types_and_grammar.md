@@ -190,7 +190,7 @@ function numsCloseEnoughToEqual(n1, n2) {
 
 The max number that can be safely called is `2^53 - 1`. There's also a min safe number. ES6 has `Number.MAX_SAFE_INTEGER` and a min equivalent.
 
-The reason there are safe numbers is that for very large numbers, JS has to store as strings. Doing operations on these will often require a library for big numbers.
+The reason there are safe numbers is that for very large numbers, JS has to store them as strings. Doing operations on these will often require a library for big numbers.
 
 Bit-wise operators need a 32-bit signed integers -- which is much smaller. Can force a number into a 32-bit signed integer (stored in `a`) via `a | 0`.
 
@@ -334,7 +334,7 @@ arr2; // [5, 2]
 
 Sparsed arrays are parsed differently depending on the browser. Also, it's not really a bunch of `undefined` values, the slots actually don't even exist. This makes it a nightmare to troubleshoot. Also, calling functions like `.map` will fail because the slots doesn't actually exist.
 
-The best way to create the array: `var arr = Array.apply(null, { length: 3 });`
+The best way to create an empty array: `var arr = Array.apply(null, { length: 3 });`
 
 Sometimes `new RegExp` makes sense, such as dynamic pattern matching.
 
@@ -435,6 +435,7 @@ Number(arr); // 29
 In some languages `true` is equal to `1` and `false` is equal to `0`. This is not true in JS under-the-hood.
 
 When coercing to a boolean, it works like this:
+
 1. The value is one that can be coerced to false
 2. Everything else
 
@@ -450,7 +451,7 @@ All falsey values:
 
 When using the native constructors, it creates an object, so it will be truthy. `var myBool = new Boolean(false)` will be truthy. In this case, `myBool` is called a "falsey object". A falsey object is an object that acts like a normal object, but when coerced to a boolean is `false`.
 
-Browsers have created their own scenarios of what to do with falsey objects. These are different from the ECMAScript spec.
+Browsers have created their own scenarios of what to do with falsey objects. These are different from the ECMAScript spec. In Chrome, the only way to get `false` from a falsey object is to run `myFalseyObj.valueOf()`.
 
 Coercing between strings and numbers is done through `String(..)` and `Number(..)`. This does not use the `new` keyword, thus does not create object wrappers.
 
@@ -773,6 +774,7 @@ If you always, always avoid `== false`, then you really only have three gotchas.
 ```
 
 Kyle's rules for avoiding `==` comparison.
+
 1. If either side can have `true` or `false`.
 2. If either side can have `[]`, `''`, or `0`.
 
@@ -1014,7 +1016,7 @@ else {
 }
 ```
 
-Operator precedence: `,` has the lowest precedence. For example, it lower than `=`.
+Operator precedence: `,` has the lowest precedence. For example, it's lower than `=`.
 
 ```javascript
 var a = 30;
@@ -1115,11 +1117,11 @@ ECMAScript is the real language and spec. JS is the browser implementation of th
 
 The majority of differences are not used.
 
-Many host objects do not conform to JS object behavior. It's important to keep this in mind. Some are not able to be overwriten, some have predefined read-only properties, some don't have `toString`.
+Many host objects do not conform to JS object behavior. It's important to keep this in mind. Some are not able to be overwritten, some have predefined read-only properties, some don't have `toString`.
 
 Creating a global variable will always create a property on the global object as well.
 
-Creating DOM elements with `id` attributes create global variables of those same names. This can seriously cause issues if you're checking for a variable's existance.
+Creating DOM elements with `id` attributes create global variables of those same names. This can seriously cause issues if you're checking for a variable's existence.
 
 ```html
 <div id="blahblah"></div>

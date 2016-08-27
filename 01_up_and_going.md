@@ -14,7 +14,7 @@ When evaluating `'99.99' == 99.99`, the left-hand side is implicitly coerced to 
 
 `for` loops have three clauses: the initialization clause (`var i = 0`), the conditional test clause (`i <= friends.length`), and the update clause (`i++`).
 
-*Scope* is technically called *lexical scope*. Scope: a collection of variables plus rules for how those variables are accessed by name. Lexical scope: code in one scope can access variables of either itself or any scope outside of it.
+*Scope* is technically called *lexical scope*. Scope: a collection of variables plus rules for how those variables are accessed by name. Lexical scope: code in one scope can access variables of either itself or any scope outside of it. It is defined at lexing time.
 
 ## Chapter 2: Into JavaScript
 
@@ -63,7 +63,7 @@ All falsey values:
 
 Coercion is OK as long as neither value will ever be `true`, `false`, `0`, `""`, or `[]`. If you can be certain about the values, use implicit coercion.
 
-Arrays are coerced into comma separated strings, rather than checked by reference.
+Arrays are coerced into comma separated strings when compared to a primitive. When compared to an object, it's checked by reference.
 
 ```javascript
 var arr1 = [1, 2, 3];
@@ -95,7 +95,7 @@ Strict mode: safer code, more optimizable, use it all the time, if it breaks thi
 Polyfill: using the definition of a new feature and making an equivalent piece of code to work in older JS envs
 
 ```javascript
-// Polyfilling ES6's Number.isNan(..)
+// Polyfilling ES6's Number.isNaN(..)
 
 if (!Number.isNaN) {
   Number.isNaN = function isNaN(x) {

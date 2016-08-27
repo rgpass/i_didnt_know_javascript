@@ -2,20 +2,21 @@
 
 ## Chapter 1: Asynchrony: Now & Later
 
-Only one part of your program will execute *now* and all the rest are done *later. For example, a function is done later.
+Only one part of your program will execute *now* and all the rest are done *later*. For example, a function declaration is declared *now* but called *later*.
 
 Syncronous Ajax requests should be avoided always. They block all user interaction (including scrolling!).
 
 Browsers have different host objects. One host object is `console.*`. Some browsers handle these calls sync and others async (since I/O is slow and blocking).
 
-If you notice that `console.log` has different results, either use `debugger` or create a snapshot via `JSON.stringify`.
+If you notice that `console.log` has different results, either use `debugger` or create a snapshot via `JSON.stringify`. This is because sometimes the browser will optimize `console.log` to fire async.
 
 The event loop is a FIFO queue.
 
 `setTimeout` doesn't put your callback into the event loop queue. What it does it wait until the timer expires then it adds to the queue. This is why timeouts won't execute after one second when `1000` is set -- it just means the time to be added to the queue is one second. If there are other things in the queue, they will be executed first.
 
 Async: now vs later.
-Parallel: both happening now simultaneously
+
+Parallel: both happening now simultaneously.
 
 Processes and threads execute independently. Processes happen on separate processors or computers. Multiple threads can share the memory of a single process.
 
@@ -88,7 +89,7 @@ function bar(x) {
 }
 
 function baz() {
-  console.log(a + b);
+  console.log(a);
 }
 
 // Note: Ajax is pseudo-code of an Ajax lib
@@ -105,6 +106,7 @@ Cooperative concurrency: take long-running "processes" and break them unto steps
 var res = [];
 
 function responseBlocking(data) {
+  // Doubling the whole dataset
   res = res.concat(data.map(function(val) {
     return val * 2;
   }));
@@ -177,7 +179,7 @@ This is best described as: "Do A, set a timer for 1000 milliseconds, do B, then 
 
 Callback hell has nothing to do with indentation. You can write the code without nesting (just making it flat via functions and scoping). It's still challenging to navigate because we have to reason about when it will be executed.
 
-If the function is executed syncronously, it will often behave in a different order than async.
+If the function is executed syncronously, it will often behave in a different order than async. This will release Zalgo.
 
 Callback hell has to do with pre-planning the code for recovery/retrying/forking flow. If something fails, it's a lot of code duplication to retry.
 
@@ -236,7 +238,7 @@ Adding two values using Promises. Note how Promises behave as future values. It 
 function add(xPromise, yPromise) {
   // Promise.all takes in an array of Promises
   // It is not resolved until all have been resolved
-  // It returns a new promise that waits all to finish
+  // It returns a new promise whose value is an array of the promise-values
   return Promise
     .all([xPromise, yPromise])
 
@@ -297,7 +299,7 @@ fetchX.then(function(val) {
 var valuesPromise = Promise
   .all([fetchX, fetchY()])
   .then(function(values) {
-    console.log(values);
+    console.log(values); // [3, 4]
     return values;
   });
 ```
@@ -395,7 +397,7 @@ p.then(function() {
 // A B C
 ```
 
-Promise scheduling has its quirks. When resolving a promise, you are putting adding to the Job queue to unwrap it i.e. you are unwrapping it async so it's added to the end of the queue. Example:
+Promise scheduling has its quirks. When resolving a promise, you are adding it to the Job queue to unwrap it i.e. you are unwrapping it async so it's added to the end of the queue. Example:
 
 ```javascript
 var p3 = new Promise(function(resolve, reject) {
@@ -537,7 +539,7 @@ p1
     // return val * 2;
 
     // If we wanted to do something async, we could either return a new Promise or do the Promise.resolve
-    // Much safter to just always do Promise.resolve
+    // Much safer to just always do Promise.resolve
     return Promise.resolve(val * 2);
     // Note: remember that Promise.resolve will either keep the same Promise if it's already one or make it one
   })
@@ -652,7 +654,7 @@ Promise
   });
 ```
 
-When working with events that need to happen multiple times (such as a button being clicked), you can set it so that a whole new Promise sequence is executed. This is necessary because each Promise are only resolved once. The downside to this approach is that you do not have separations of concerns. You must define the entire chain inside the event handler.
+When working with events that need to happen multiple times (such as a button being clicked), you can set it so that a whole new Promise sequence is executed. This is necessary because each Promise is only resolved once. The downside to this approach is that you do not have separations of concerns. You must define the entire chain inside the event handler.
 
 "A code base in motion (with callbacks) will remain in motion (with callbacks) unless acted upon by a smart, Promises-aware developer."
 
@@ -770,7 +772,7 @@ Multiple instances of one generator can be created. They are their own (child) s
 
 Iterator: a well-defined interface for stepping through a series of values from a producer. The interface is to call `.next()` each time you want the next value from the producer. See `something` below.
 
-Iterable: an `object` that contains an iterator. The iterable must have a function on with the name being the special ES6 symbol value `Symbol.iterator`.
+Iterable: an `object` that contains an iterator. The iterable must have a function on it with the name being the special ES6 symbol value `Symbol.iterator`.
 
 ```javascript
 var gimmeSomething = (function() {
@@ -870,7 +872,8 @@ A generator function creates an iterator (not an iterable).
 function *genSomething() {
   var nextVal;
 
-  // Can do this infinite loop with generators no-problem as you are in control of when this runs
+  // Can do an infinite loop with generators no-problem as you are in control of when this runs
+  // Just make sure to have a break in a for..of
   while (true) {
     if (nextVal === undefined) {
       nextVal = 1;
@@ -1024,7 +1027,7 @@ p
   });
 ```
 
-What if we want to Promise-drive a generator such that if a Promise comes out, it should we wait on its resolution before continuing? What if an error occurs? Find a utility that covers these scenarios. Here's an example of our `run`:
+What if we want to Promise-drive a generator such that if a Promise comes out, it should wait on its resolution before continuing? What if an error occurs? Find a utility that covers these scenarios. Here's an example of our `run`:
 
 ```javascript
 function run(gen) {
@@ -1147,7 +1150,7 @@ it.next().value; // "*foo() finished"  5
 
 Can even do something like `yield *[1, 2, 3]` as the array is an iterable.
 
-Thunk: a function with no params that wraps around a another function that has params
+Thunk: a function with no params that wraps around an another function that has params
 
 ```javascript
 function foo(x, y) {
@@ -1163,7 +1166,7 @@ fooThunk(); // 7
 
 ## Chapter 5: Program Performance
 
-Web Workers allow for another thread. This way you can have the main UI thread another thread. This is a browser (or other host environment) feature.
+Web Workers allow for another thread. This way you can have the main UI thread and another thread. This is a browser (or other host environment) feature.
 
 To instantiate a Worker:
 
@@ -1200,11 +1203,11 @@ Common uses for Workers:
 * data operations (compression, audio analysis, image pixel manipulations, etc)
 * high-traffic network communications
 
-Structured Cloning Algorithm: the process use to copy/duplicate an object passed to/from a Worker.
+Structured Cloning Algorithm: the process used to copy/duplicate an object passed to/from a Worker.
 
 Transferable Objects: a better solution where the ownership of an object is transferred, but the data itself is not moved. The original thread loses the ability to manipulate the data, removing the hazard of threaded programming shared scope.
 
-Browsers that do not have Transferable Objects degraded nicely (at the cost of performance) to a Structured Cloning Algorithm.
+Browsers that do not have Transferable Objects degrade nicely (at the cost of performance) to a Structured Cloning Algorithm.
 
 Shared Worker: with a normal worker, loading a new tab will create a new Worker instance. With Shared Workers, all tabs shared the same Worker. This is useful for web socket connections.
 
@@ -1219,7 +1222,7 @@ asm.js -- a subset of JS that can be aggressively optimized. It avoids hard to o
 asm.js is a style of coding, however it's best to use a build step with it.
 
 ```javascript
-// normal code -- requires the engine keep track of what data type is being used
+// normal code -- requires the engine to keep track of what data type is being used
 var a = 30;
 
 // ...
@@ -1262,7 +1265,7 @@ This doesn't always work because if it's less than 1ms, it won't show up. Also, 
 
 Also, if the system or engine had interference then the data is not true.
 
-You need to have a high quantity of tests run. The better approach is to run the tests for a preset amount of time and see how many times it can do that operation.
+You need run a high quantity of tests. The better approach is to run the tests for a preset amount of time and see how many times it can do that operation.
 
 Benchmark.js is a tool made by some statisticians to help. It's considered the best benchmarking tool.
 

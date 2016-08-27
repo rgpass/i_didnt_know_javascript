@@ -5,7 +5,7 @@
 In traditional compiled-languages, your code will undergo three steps prior to execution called "compilation".
 
 1. Tokenizing/Lexing: breaking up a string of characters into meaningful chunks called tokens. `var a = 2;` gets broken up into the following tokens: `var`, `a`, `=`, `2`, and `;`.
-2. Parsing: takes this stream (array) of tokens and converts it into a tree of nested elements which represent the grammatical structure of the program. This tree is called Abstract Syntax Tree (AST). For the `var a = 2;` example, this would look like: `VariableDeclaration > Identifier (a), AssignmentExpression > NumericLiteral (2)`.
+2. Parsing: takes this stream (array) of tokens and converts it into a tree of nested elements which represent the grammatical structure of the program. This tree is called Abstract Syntax Tree (AST). For the `var a = 2;` example, this would look like: `VariableDeclaration > Identifier (a), AssignmentExpression > NumericLiteral (2)`. Can visualize this with an [AST Visualizer](http://jointjs.com/demos/javascript-ast).
 3. Code Generation: turns AST into executable code and handles reserving memory
 
 In JS, compilation happens just microseconds before execution.
@@ -45,8 +45,9 @@ logIt(29);
 
 In `logIt` above, the Compiler does not assign the function to the value of `logIt`, rather it handles both the declaration and the value definition during code generation.
 
-ReferenceError: scope related issue
-TypeError: data type related issue (such as executing a non-function or retrieving a property of `undefined`)
+`ReferenceError`: scope related issue
+
+`TypeError`: data type related issue (such as executing a non-function or retrieving a property of `undefined`)
 
 ## Chapter 2: Lexical Scope
 
@@ -102,11 +103,13 @@ Another benefit of block scoping is to enable garbage collection.
 In the example below, because both the `hugeDataSet` and the event listener are in the same scope, `hugeDataSet` will not be GC'ed because the Engine thinks that it may be used again.
 
 ```javascript
-function processData() {
+function processData(data) {
   // ...
 }
 
 var hugeDataSet = {};
+
+processData(hugeDataSet);
 
 var btn = document.getElementById('my-btn');
 btn.addEventListener('click', function onBtnClick(evt) {
@@ -117,7 +120,7 @@ btn.addEventListener('click', function onBtnClick(evt) {
 Applying block scope, we can tell the GC'er to clean it up after use.
 
 ```javascript
-function processData() {
+function processData(data) {
   // ...
 }
 
@@ -133,7 +136,7 @@ btn.addEventListener('click', function onBtnClick(evt) {
 }, false);
 ```
 
-For `for` loops, the `i` actually re-binds it to each iteration. This is the equivalent of:
+When using `let` in `for` loops, the iterator (`i`) actually re-binds each iteration. This is the equivalent of:
 
 ```javascript
 {
@@ -258,7 +261,7 @@ for (let i = 0; i <= 5; i++) {
 }
 ```
 
-Module pattern has two requirements: (1) it must be outer enclosing function that is envoked at least once, (2) the enclosing function must return back at least one function
+Module pattern has two requirements: (1) it must be an outer enclosing function that is envoked at least once, (2) the enclosing function must return back at least one function
 
 Functions that return an object with just data aren't really modules.
 

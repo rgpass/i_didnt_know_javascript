@@ -15,7 +15,6 @@ Some of my notes may seem trivial or obvious, such as terminology, but I ask tha
 * Book 3: This & Object Prototypes
   * Submit PR to the book with changes. Look up in this section "`newObj.a; // 10`" and in chapter 5 "then the setter will always be called"
 * Book 4: Types & Grammar
-  * Look up how to coerce a falsey object to `false`
   * Research and practice bitwise operators
 * Book 5: Async & Performance
   * Look up ["revealing constructor"](http://domenic.me/2014/02/13/the-revealing-constructor-pattern/) pattern

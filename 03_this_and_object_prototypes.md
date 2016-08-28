@@ -689,6 +689,27 @@ var newObj = Object.create(myObj);
 newObj.a = 5;
 newObj.a; // 10
 myObj.a; // 4
+
+
+// Example of #3 above
+var originalObj;
+var delegatedObj;
+
+originalObj = {};
+
+delegatedObj = {
+  a: 2,
+  set foo(val) {
+    console.log('Delegated Obj -- foo setter');
+  }
+};
+
+Object.setPrototypeOf(originalObj, delegatedObj);
+
+delegatedObj.foo = 4; // "Delegated Obj -- foo setter"
+originalObj.foo; // undefined
+originalObj.foo = 2; // "Delegated Obj -- foo setter"
+originalObj.foo; // undefined
 ```
 
 Implicit shadowing can lead to weird results. In general, be careful with delegated properties that you want to modify.

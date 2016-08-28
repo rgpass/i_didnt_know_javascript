@@ -12,11 +12,6 @@ Some of my notes may seem trivial or obvious, such as terminology, but I ask tha
 
 ## Pending Todos
 
-* Book 3: This & Object Prototypes
-  * Submit PR to the book with changes. Look up in this section "`newObj.a; // 10`" and in chapter 5 "then the setter will always be called"
-    * Create an `originalObj`, `delegatedObj`, and `delegatedObjProxy`
-    * Proto-link `originalObj` to `delegatedObjProxy`
-    * Confirm that this does not call `delegatedObjProxy`
 * Book 5: Async & Performance
   * Look up examples of generators in the wild
   * Re-read chapter 4, appendix A, and appendix B after looking up more resources and playing around with Generators -- specifically gens+promises
